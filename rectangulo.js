@@ -1,6 +1,7 @@
 const canvasSketch = require("canvas-sketch");
 const math = require("canvas-sketch-util/math");
 const random = require("canvas-sketch-util/random");
+import risoColors from "riso-colors";
 
 const settings = {
   dimensions: [1080, 1080],
@@ -14,14 +15,20 @@ const sketch = ({ context, width, height }) => {
 
   const rects = [];
 
+  const rectColors = [
+    random.pick(risoColors),
+    random.pick(risoColors),
+    random.pick(risoColors),
+  ]
+
   for (let i = 0; i < num; i++) { 
     x = random.range(0, width );
     y = random.range(0, height );
     w = random.range(200, 600);
     h = random.range(40, 200);
 
-    stroke = 'black';
-    fill = `rgba(0, 0, 0, ${random.range(0.1, 0.5)})`;
+    stroke = random.pick(rectColors).hex;
+    fill = random.pick(rectColors).hex;
     rects.push({ x, y, w, h, fill, stroke });
   }
 
