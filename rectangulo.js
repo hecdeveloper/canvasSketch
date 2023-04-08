@@ -1,6 +1,7 @@
 const canvasSketch = require("canvas-sketch");
 const math = require("canvas-sketch-util/math");
 const random = require("canvas-sketch-util/random");
+const Color = require("canvas-sketch-util/color");
 import risoColors from "riso-colors";
 
 const settings = {
@@ -9,8 +10,8 @@ const settings = {
 };
 
 const sketch = ({ context, width, height }) => {
-  let x, y, w, h, fill, stroke;
-  const num = 20;
+  let x, y, w, h, fill, stroke, blend;
+  const num = 40;
   const degrees = -30;
 
   const rects = [];
@@ -18,36 +19,72 @@ const sketch = ({ context, width, height }) => {
   const rectColors = [
     random.pick(risoColors),
     random.pick(risoColors),
-    random.pick(risoColors),
   ]
+
+  const bgColor = random.pick(risoColors).hex;
 
   for (let i = 0; i < num; i++) { 
     x = random.range(0, width );
     y = random.range(0, height );
-    w = random.range(200, 600);
+    w = random.range(600, width);
     h = random.range(40, 200);
 
-    stroke = random.pick(rectColors).hex;
     fill = random.pick(rectColors).hex;
-    rects.push({ x, y, w, h, fill, stroke });
+    stroke = random.pick(rectColors).hex;
+    blend = (random.value() > 0.5) ? 'overlay' : 'source-over';
+    rects.push({ x, y, w, h, fill, stroke, blend });
   }
 
   return ({ context, width, height }) => {
-    context.fillStyle = "white";
+    context.fillStyle = bgColor;
     context.fillRect(0, 0, width, height);
+    //Triangulo
+    context.save();
+    context.translate(width * 0.5, height * 0.5);
+    context.beginPath();
+    context.moveTo(0, -300);
+    context.lineTo(300, 200);
+    context.lineTo(-300, 200);
+    context.closePath();
+
+    context.lineWidth = 10;
+    context.strokeStyle = 'black';
+    context.stroke();
+    context.clip();
 
     rects.forEach(rect =>{
-      const { x, y, w, h, fill, stroke } = rect;
+      const { x, y, w, h, fill, stroke, blend } = rect;
+      let shadowColor;
+
+
       context.save();
+      context.translate(width * -0.5, height * -0.5);
       context.translate(x, y);
-      context.strokeStyle = stroke;
+      context.strokeStyle = stroke;  
       context.fillStyle = fill;
+      context.lineWidth = 10;
+
+      context.globalCompositeOperation = blend;
 
       drawSkewedRect({ context, w, h, degrees});
-      context.stroke();
+      shadowColor = Color.offsetHSL(fill, 0, 0, -20);
+      shadowColor.rgba[3] = 0.5;
+
+      context.shadowColor = Color.style(shadowColor.rgba);
+      context.shadowOffsetX = -10;
+      context.shadowOffsetY = 20;
       context.fill();
+      context.shadowColor = null;
+      context.stroke();
+      context.lineWidth = 2;
+      context.strokeStyle = 'black';
+      context.stroke();
+
       context.restore();
     });
+
+
+    context.restore();
   };
 };
 
