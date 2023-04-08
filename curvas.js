@@ -4,13 +4,14 @@ const settings = {
   dimensions: [1080, 1080],
 };
 
-const sketch = () => {
-    const points = [
-        new Point({ x: 200, y: 540 }),
-        new Point({ x: 400, y: 700, control: true }),
-        new Point({ x: 880, y: 540 }),
-    ]
+const sketch = ({ canvas }) => {
+  const points = [
+    new Point({ x: 200, y: 540 }),
+    new Point({ x: 400, y: 700, control: true }),
+    new Point({ x: 880, y: 540 }),
+  ];
 
+  canvas.addEventListener("mousedown", onmousedown);
 
   return ({ context, width, height }) => {
     context.fillStyle = "white";
@@ -18,11 +19,16 @@ const sketch = () => {
 
     context.beginPath();
     context.moveTo(points[0].x, points[0].y);
-    context.quadraticCurveTo(points[1].x, points[1].y, points[2].x, points[2].y);
+    context.quadraticCurveTo(
+      points[1].x,
+      points[1].y,
+      points[2].x,
+      points[2].y
+    );
     context.stroke();
-    points.forEach(point => {
-        point.draw(context);
-    })
+    points.forEach((point) => {
+      point.draw(context);
+    });
   };
 };
 
