@@ -4,6 +4,8 @@ const settings = {
   dimensions: [1080, 1080],
 };
 
+let elCanvas;
+
 const sketch = ({ canvas }) => {
   const points = [
     new Point({ x: 200, y: 540 }),
@@ -12,6 +14,8 @@ const sketch = ({ canvas }) => {
   ];
 
   canvas.addEventListener("mousedown", onmousedown);
+
+  elCanvas = canvas;
 
   return ({ context, width, height }) => {
     context.fillStyle = "white";
@@ -38,7 +42,7 @@ const onmousedown = (e) => {
 };
 
 const onmousemove = (e) => {
-     
+    console.log(e.offsetX, e.offsetY);
 }
 
 const onmouseup = (e) => {
