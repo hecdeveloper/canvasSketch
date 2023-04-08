@@ -7,7 +7,7 @@ const settings = {
 const sketch = () => {
     const points = [
         new Point({ x: 200, y: 540 }),
-        new Point({ x: 400, y: 300, control: true }),
+        new Point({ x: 400, y: 700, control: true }),
         new Point({ x: 880, y: 540 }),
     ]
 
