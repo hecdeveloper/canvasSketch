@@ -32,6 +32,20 @@ const sketch = ({ canvas }) => {
   };
 };
 
+const onmousedown = (e) => {
+    window.addEventListener("mousemove", onmousemove);
+    window.addEventListener("mouseup", onmouseup); 
+};
+
+const onmousemove = (e) => {
+     
+}
+
+const onmouseup = (e) => {
+    window.removeEventListener("mousemove", onmousemove);
+    window.removetListener("mouseup", onmouseup);
+}
+
 canvasSketch(sketch, settings);
 
 class Point {
