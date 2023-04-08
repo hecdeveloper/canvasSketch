@@ -1,15 +1,24 @@
+import risoColors from "riso-colors";
 const canvasSketch = require("canvas-sketch");
 const math = require("canvas-sketch-util/math");
 const random = require("canvas-sketch-util/random");
 const Color = require("canvas-sketch-util/color");
-import risoColors from "riso-colors";
+
+const seed = random.getRandomSeed();
 
 const settings = {
   dimensions: [1080, 1080],
   animate: true,
+  name: seed,
 };
 
 const sketch = ({ context, width, height }) => {
+  random.setSeed(seed);
+  console.log(random.value());
+  console.log(random.value());
+  console.log(random.value());
+
+
   let x, y, w, h, fill, stroke, blend;
   const num = 40;
   const degrees = -30;
@@ -27,7 +36,7 @@ const sketch = ({ context, width, height }) => {
     radius: width * 0.4,
     sides: 3,
     x: width * 0.5,
-    y: height * 0.5,
+    y: height * 0.58,
   }
 
   for (let i = 0; i < num; i++) { 
@@ -89,11 +98,11 @@ const sketch = ({ context, width, height }) => {
     //poligono
     context.save();
     context.translate(mask.x, mask.y);
-    
-    drawPolygon({ context, radius: mask.radius, sides: mask.sides });
+    context.lineWidth = 20;
 
-    context.lineWidth = 10;
-    context.strokeStyle = 'black';
+    drawPolygon({ context, radius: mask.radius - context.lineWidth, sides: mask.sides });
+    context.globalCompositeOperation = 'color-burn';
+    context.strokeStyle = rectColors[0].hex;
     context.stroke();
 
     context.restore();
