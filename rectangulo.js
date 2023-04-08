@@ -1,5 +1,6 @@
 const canvasSketch = require("canvas-sketch");
 const math = require("canvas-sketch-util/math");
+const random = require("canvas-sketch-util/random");
 
 const settings = {
   dimensions: [1080, 1080],
@@ -7,33 +8,32 @@ const settings = {
 
 const sketch = () => {
   let x, y, w, h;
-  let angle, rx, ry;
+  const num = 20;
 
   return ({ context, width, height }) => {
-    context.fillStyle = "white";
+    context.fillStyle = "#0fc5b9";
     context.fillRect(0, 0, width, height);
 
-    x = width * 0.5;
-    y = height * 0.5;
-    w = width * 0.6;
-    h = height * 0.1;
+    for (let i = 0; i < num; i++) {
+      x = random.range(0, width );
+      y = random.range(0, height );
+      w = width * 0.6;
+      h = height * 0.1;
 
-    context.save();
-    context.translate(x, y);
-
-    context.strokeStyle = "blue";
-    drawSkewedRect({ context, w, h, degrees: -45 });
-    context.strokeStyle = "red";
-
-    context.restore();
+      context.save();
+      context.translate(x, y);
+      context.strokeStyle = "#0e0e0e";
+      drawSkewedRect({ context});
+      context.stroke();
+      context.restore();
+    }
   };
 };
 
 const drawSkewedRect = ({ context, w = 600, h = 200, degrees = -45 }) => {
-  
   const angle = math.degToRad(degrees);
   const rx = Math.cos(angle) * w;
-  const ry = Math.sin(angle) * w;  
+  const ry = Math.sin(angle) * w;
 
   context.save();
 
