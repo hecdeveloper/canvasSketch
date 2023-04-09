@@ -43,21 +43,28 @@ const sketch = ({ width, height }) => {
     context.strokeStyle = "red";
     context.lineWidth = 4;
 
+    let lastx, lasty;
+
     //draw lines
     for (let r = 0; r < rows; r++) {
-      context.beginPath();
       for (let c = 0; c < cols - 1; c++) {
         const curr = points[r * cols + c + 0];
         const next = points[r * cols + c + 1];
         const mx = curr.x + (next.x - curr.x) * 0.5;
         const my = curr.y + (next.y - curr.y) * 0.5;
 
-        if (c == 0) context.moveTo(curr.x, curr.y);
-        else if (c == cols - 2)
-          context.quadraticCurveTo(curr.x, curr.y, next.x, next.y);
-        else context.quadraticCurveTo(curr.x, curr.y, mx, my);
+        if (!c){
+          lastx = curr.x;
+          lasty = curr.y;
+        }
+
+        context.beginPath();
+        context.moveTo(lastx, lasty);
+         context.quadraticCurveTo(curr.x, curr.y, mx, my);
+        context.stroke();
+        lastx = mx;
+        lasty = my;
       }
-      context.stroke();
     }
 
     //draw points
